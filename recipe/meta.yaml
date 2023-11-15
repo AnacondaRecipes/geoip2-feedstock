@@ -10,32 +10,45 @@ source:
   sha256: 3bdde4994f6bc917eafab5b51e772d737b2ae00037a5b85001fb06dc68f779df
 
 build:
-  noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py<37]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
+    - setuptools
+    - wheel
   run:
-    - python >=3.7
+    - python
     - aiohttp >=3.6.2,<4.0.0
     - maxminddb >=2.3.0,<3.0.0
     - requests >=2.24.0,<3.0.0
 
 test:
+  source_files:
+    - tests
   imports:
     - geoip2
+  commands:
+    - pip check
+    # Skip webservice_test.py because we don't have mocket on defaults.
+    - pytest -v tests --ignore=tests/webservice_test.py
+  requires:
+    - pip
+    - pytest
 
 about:
-  home: https://pypi.org/project/geoip2/#description
-  dev_url: https://github.com/maxmind/GeoIP2-python
+  home: https://geoip2.readthedocs.io
+  summary: IP address geolocation library for Maxmind DBs
+  description: |
+    This package provides an API for the GeoIP2 and GeoLite2 web services and databases.
   license: Apache-2.0
   license_family: APACHE
   license_file: LICENSE
-  license_url: https://opensource.org/license/apache-2-0/
-  summary: IP address geolocation library for Maxmind DBs
+  dev_url: https://github.com/maxmind/GeoIP2-python
+  doc_url: https://geoip2.readthedocs.io
 
 extra:
   recipe-maintainers:
