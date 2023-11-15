@@ -20,7 +20,6 @@ requirements:
     - pip
     - setuptools
     - wheel
-    - setuptools-scm
   run:
     - python
     - aiohttp >=3.6.2,<4.0.0
